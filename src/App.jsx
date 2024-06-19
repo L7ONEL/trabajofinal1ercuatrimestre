@@ -1,35 +1,82 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Component } from "react";
+import axios from 'axios'
+import Registrar from './Componentes/Registrar';
+import InicioSesion from './Componentes/InicioSesion';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+          username: "",
+          contraseña: "",
+          nombre: "",
+          apellido: "",
+          dni: "",
+          registrarse: true
+        }
+      }
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      registrarUsuario(user, pass, nombre, apellido, dni) {
+        const url = "http://10.0.4.103:3001/api/registrar"
+        const data = {
+          user,
+          pass,
+          nombres: nombre,
+          apellidos: apellido,
+          documento: dni
+        }
+        
+        axios.post(url, data)
+          .then((response) => {
+            alert("Usuario registrado.");
+            console.log(response.data);
+            
+            this.setState({ registrarse: false })
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+
+      cambiarModo(registrarse) {
+        this.setState({ registrarse })
+      }
+        
+      iniciarSesion(user, pass) {
+        const url = "http://10.0.4.103:3001/api/ingresar"
+        const data = {
+          user,
+          pass,
+        }
+    
+        axios.post(url, data)
+          .then((response) => {
+            this.setState({token: response.data.token});
+            alert("Sesión iniciada correctamente.");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+
+    render() {
+        return (
+            <div className='Cuerpo'>
+                <div className='Lista'>
+                  {this.state.registrarse ?
+                    <Registrar 
+                      registrarUsuario = {(user, pass, nombre, apellido, dni) => this.registrarUsuario(user, pass, nombre, apellido, dni)}
+                      cambiarModo = {() => this.cambiarModo()}
+                    />
+                  :     
+                    <InicioSesion 
+                      iniciarSesion = {(user, pass) => this.iniciarSesion(user, pass)}
+                      cambiarModo = {() => this.cambiarModo()}
+                    />
+                  }
+                </div>
+            </div>
+        )
+    }
 }
-
-export default App
