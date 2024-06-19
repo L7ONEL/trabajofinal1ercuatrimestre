@@ -2,7 +2,9 @@ import { Component } from "react";
 import axios from 'axios'
 import Registrar from './Componentes/Registrar';
 import InicioSesion from './Componentes/InicioSesion';
+import Regis_Persona from "./Componentes/Regis_Persona";
 import './App.css';
+
 
 export default class App extends Component {
     constructor(props) {
@@ -74,7 +76,11 @@ export default class App extends Component {
                       iniciarSesion = {(user, pass) => this.iniciarSesion(user, pass)}
                       cambiarModo = {() => this.cambiarModo()}
                     />
+            
                   }
+                  <Regis_Persona>
+                    
+                  </Regis_Persona>
                 </div>
             </div>
         )
