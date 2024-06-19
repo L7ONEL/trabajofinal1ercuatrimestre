@@ -19,7 +19,7 @@ export default class App extends Component {
     }
 
     registrarUsuario = (user, pass, nombre, apellido, dni) => {
-        const url = "http://10.0.4.103:3001/api/registrar";
+        const url = "https://personas.ctpoba.edu.ar/api/registrar";
         const data = {
             user,
             pass,
@@ -44,7 +44,7 @@ export default class App extends Component {
     }
         
     iniciarSesion = (user, pass) => {
-        const url = "http://10.0.4.103:3001/api/ingresar";
+        const url = "https://personas.ctpoba.edu.ar/api/ingresar";
         const data = {
             user,
             pass,
