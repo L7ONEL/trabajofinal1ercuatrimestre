@@ -60,3 +60,7 @@
 .Link:hover {
   text-decoration: underline;
 }
+
+.Filtro {
+  margin-left: 10px;
+}
