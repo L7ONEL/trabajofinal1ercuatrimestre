@@ -2,6 +2,8 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .Cuerpo {
@@ -57,4 +59,18 @@
 
 .Link:hover {
   text-decoration: underline;
+}
+
+.Tabla {
+  border: 1px solid black;
+  background-color: white;
+}
+
+tr.Titulos {
+  background-color: #007BFF;
+  color: white;
+}
+
+th {
+  padding: 5px;
 }
