@@ -3,7 +3,7 @@ import axios from 'axios';
 import Registrar from './componentes/Registrar';
 import InicioSesion from "./componentes/InicioSesion";
 import FiltrarPersonas from "./componentes/FiltrarPersonas";
-import Usuarios from "./componentes/Usuarios";
+import Personas from "./componentes/Personas";
 import './App.css';
 
 export default class App extends Component {
@@ -60,6 +60,8 @@ export default class App extends Component {
                 this.setState({ token: response.data.token, registrarse: false, iniciar: false, personasTabla: true });
                 console.log(response.data);
                 alert("Sesión iniciada correctamente.");
+
+                this.extraerPersonas(response.data.token, this.state.dni, this.state.nombre, this.state.apellido)
             })
             .catch((error) => {
                 console.log(error);
@@ -69,17 +71,24 @@ export default class App extends Component {
     extraerPersonas(token, dni, nombre, apellido) {
         const url = "https://personas.ctpoba.edu.ar/api/personas";
         const config = {
-            header: {
+            headers: {
                 authorization: token
             },
             params: {
-                dni,
-                nombre,
-                apellido
+                documento: dni,
+                nombres: nombre,
+                apellidos: apellido
             }
         };
 
-        
+        axios.get(url, config)
+            .then((response) => {
+                this.setState({ personas: response.data.personas })
+                console.log(this.state.personas);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     render() {
@@ -104,14 +113,22 @@ export default class App extends Component {
                         
                         <div className="Cuadro">
                             <FiltrarPersonas 
-                                dni = {this.state.dni}
-                                nombre = {this.state.nombre}
-                                apellido = {this.state.apellido}
+                                token = {this.state.token}
                                 extraerPersonas = {(dni, nombre, apellido) => this.extraerPersonas(this.state.token, dni, nombre, apellido)}
                             />
                             {this.state.personas.map((cont, index) => 
-                                <table>
-                                    <Usuarios 
+                                <table className="Tabla">
+                                    <tr className="Titulos">
+                                        <th>DNI</th>
+                                        <th>Nombres</th>
+                                        <th>Apellidos</th>
+                                        <th>Fec. Nac.</th>
+                                        <th>Telefono</th>
+                                        <th>Domicilio</th>
+                                        <th>E-mail</th>
+                                    </tr>
+                                    <Personas
+                                        key={index}
                                         documento = {cont.documento}
                                         nombres = {cont.nombres}
                                         apellidos = {cont.apellidos}

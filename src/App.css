@@ -61,6 +61,16 @@
   text-decoration: underline;
 }
 
-.Filtro {
-  margin-left: 10px;
+.Tabla {
+  border: 1px solid black;
+  background-color: white;
+}
+
+tr.Titulos {
+  background-color: #007BFF;
+  color: white;
+}
+
+th {
+  padding: 5px;
 }

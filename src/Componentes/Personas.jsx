@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export default class Usuarios extends Component {
+export default class Personas extends Component {
   render() {
     return (
       <tr>
