@@ -64,7 +64,9 @@ export default class Regis_Persona extends Component{
                 required
                 />
 
-                <button className="Boton">Guardar</button>
+                <button className="Boton"
+                onClick={()=> this.props.registrarPersona(this.state.documento, this.state.nombres, this.state.apellidos, this.state.fechnac, this.state.telefono, this.state.domicilio, this.state.mail)}
+                >Guardar</button>
 
 
             </div>

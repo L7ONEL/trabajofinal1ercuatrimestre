@@ -34,11 +34,39 @@ export default class App extends Component {
             alert("Usuario registrado.");
             console.log(response.data);
             
-            this.setState({ registrarse: false })
+            this.setState({ registrarse: false });
           })
           .catch((error) => {
             console.log(error);
           });
+      }
+
+      registrarPersona(documento, nombres, apellidos, fechnac, telefono, domicilio, mail){
+        const url = "http://personas.ctpoba.edu.ar/api/personas";
+        const data = {
+          documento: documento,
+          nombre: nombres,
+          apellido: apellidos,
+          fechnac: fechnac,
+          telefono: telefono,
+          domicilio: domicilio,
+          mail: mail,
+        };
+         axios.post(url, data, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+         })
+         .then((response)=>{
+          alert("Persona guardada.");
+          console.log(response.data);
+         })
+         .catch((error)=>{
+          console.log(error);
+         }
+        );
+
+
       }
 
       cambiarModo(registrarse) {
@@ -78,9 +106,10 @@ export default class App extends Component {
                     />
             
                   }
-                  <Regis_Persona>
-                    
-                  </Regis_Persona>
+                  <Regis_Persona 
+                  registrarPersona = {(documento, nombres, apellidos, fechnac, telefono, domicilio, mail) => this.registrarPersona(documento, nombres, apellidos, fechnac, telefono, domicilio, telefono)}/>
+                     
+                  
                 </div>
             </div>
         )
