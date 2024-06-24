@@ -4,7 +4,10 @@ import Registrar from './componentes/Registrar';
 import InicioSesion from "./componentes/InicioSesion";
 import FiltrarPersonas from "./componentes/FiltrarPersonas";
 import Personas from "./componentes/Personas";
+import AgregarEditarPersona from "./componentes/AgregarEditarPersona";
 import './App.css';
+import eliminar from './assets/eliminar.png';
+import editar from './assets/editar.png';
 
 export default class App extends Component {
     constructor(props) {
@@ -18,6 +21,8 @@ export default class App extends Component {
             registrarse: true,
             iniciar: false,
             personasTabla: false,
+            agregar: false,
+            editar: false,
             token: null,
             personas: []
         }
@@ -37,15 +42,15 @@ export default class App extends Component {
             .then((response) => {
                 alert("Usuario registrado.");
                 console.log(response.data);
-                this.setState({ registrarse: false, iniciar: true, personasTabla: false });
+                this.setState({ registrarse: false, iniciar: true, personasTabla: false, agregar: false, editar: false });
             })
             .catch((error) => {
                 console.log(error);
             });
     }
 
-    cambiarModo(registrarse, iniciar, personasTabla) {
-        this.setState({ registrarse, iniciar, personasTabla });
+    cambiarModo(registrarse, iniciar, personasTabla, agregar, editar) {
+        this.setState({ registrarse, iniciar, personasTabla, agregar, editar });
     }
         
     iniciarSesion(user, pass) {
@@ -57,7 +62,7 @@ export default class App extends Component {
     
         axios.post(url, data)
             .then((response) => {
-                this.setState({ token: response.data.token, registrarse: false, iniciar: false, personasTabla: true });
+                this.setState({ token: response.data.token, registrarse: false, iniciar: false, personasTabla: true, agregar: false, editar: false });
                 console.log(response.data);
                 alert("Sesión iniciada correctamente.");
 
@@ -91,6 +96,50 @@ export default class App extends Component {
             });
     }
 
+    registrarPersona(documento, nombres, apellidos, fechaNac, telefono, domicilio, mail) {
+        const url = "https://personas.ctpoba.edu.ar/api/personas";
+        const data = {
+            documento,
+            nombres,
+            apellidos,
+            fechaNac,
+            telefono,
+            domicilio,
+            mail
+        };
+        
+        axios.post(url, data)
+            .then((response) => {
+                alert("Persona registrada.");
+                console.log(response.data);
+                this.setState({ registrarse: false, iniciar: false, personasTabla: true, agregar: false, editar: false });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    eliminarPersona(token, persona_id) {
+        const url = "https://personas.ctpoba.edu.ar/api/personas";
+        const config = {
+            headers: {
+                authorization: token
+            },
+            params: {
+                persona_id
+            }
+        };
+
+        axios.delete(url, config)
+            .then((response) => {
+                alert("Se ha eliminado correctamente a la persona")
+                console.log(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
     render() {
         return (
             <div className='Cuerpo'>
@@ -99,14 +148,14 @@ export default class App extends Component {
 
                         <Registrar 
                             registrarUsuario={(user, pass, nombre, apellido, dni) => this.registrarUsuario(user, pass, nombre, apellido, dni)}
-                            cambiarModo={() => this.cambiarModo(false, true, false)}
+                            cambiarModo={() => this.cambiarModo(false, true, false, false, false)}
                         />
 
                     } {this.state.iniciar &&
 
                         <InicioSesion 
                             iniciarSesion={(user, pass) => this.iniciarSesion(user, pass)}
-                            cambiarModo={() => this.cambiarModo(true, false, false)}
+                            cambiarModo={() => this.cambiarModo(true, false, false, false, false)}
                         />
 
                     } {this.state.personasTabla &&
@@ -116,30 +165,64 @@ export default class App extends Component {
                                 token = {this.state.token}
                                 extraerPersonas = {(dni, nombre, apellido) => this.extraerPersonas(this.state.token, dni, nombre, apellido)}
                             />
-                            {this.state.personas.map((cont, index) => 
+
+                            <div style={{marginTop: '10px'}}>
                                 <table className="Tabla">
-                                    <tr className="Titulos">
-                                        <th>DNI</th>
-                                        <th>Nombres</th>
-                                        <th>Apellidos</th>
-                                        <th>Fec. Nac.</th>
-                                        <th>Telefono</th>
-                                        <th>Domicilio</th>
-                                        <th>E-mail</th>
-                                    </tr>
-                                    <Personas
-                                        key={index}
-                                        documento = {cont.documento}
-                                        nombres = {cont.nombres}
-                                        apellidos = {cont.apellidos}
-                                        fechaNac = {cont.fechaNac}
-                                        telefono = {cont.telefono}
-                                        domicilio = {cont.domicilio}
-                                        mail = {cont.mail}
-                                    />
+                                    <thead className="Titulos">
+                                        <tr>
+                                            <th>DNI</th>
+                                            <th>Nombres</th>
+                                            <th>Apellidos</th>
+                                            <th>Fec. Nac.</th>
+                                            <th>Telefono</th>
+                                            <th>Domicilio</th>
+                                            <th>E-mail</th>
+                                            <th>Opciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {this.state.personas.map((cont, index) => 
+                                            <Personas
+                                                key={index}
+                                                documento = {cont.documento}
+                                                nombres = {cont.nombres}
+                                                apellidos = {cont.apellidos}
+                                                fechaNac = {cont.fechaNac}
+                                                telefono = {cont.telefono}
+                                                domicilio = {cont.domicilio}
+                                                mail = {cont.mail}
+                                                editar = {editar}
+                                                eliminar = {eliminar}
+                                                cambiarModo = {(registrarse, iniciar, personasTabla, agregar, editar) => this.cambiarModo(registrarse, iniciar, personasTabla, agregar, editar)}
+                                                eliminarPersona = {(token, persona_id) => this.eliminarPersona(token, persona_id)}
+                                                token = {this.state.token}
+                                            />
+                                        )}
+                                    </tbody>
                                 </table>
-                            )}
+
+                                <button 
+                                    className="Boton"
+                                    onClick={() => this.cambiarModo(false, false, false, true, false)}
+                                >Agregar persona</button>
+                            </div>
                         </div>
+
+                    } {this.state.agregar && 
+                        
+                        <AgregarEditarPersona 
+                            titulo = "AGREGAR UNA NUEVA PERSONA"
+                            accion = {(documento, nombres, apellidos, fechaNac, telefono, domicilio, mail) => this.registrarPersona(documento, nombres, apellidos, fechaNac, telefono, domicilio, mail)}
+                            boton = "Agregar persona"
+                        />
+
+                    } {this.state.editar &&
+
+                        <AgregarEditarPersona 
+                            titulo = "EDITAR DATOS DE PERSONA"
+                            accion = {(documento, nombres, apellidos, fechaNac, telefono, domicilio, mail) => this.registrarPersona(documento, nombres, apellidos, fechaNac, telefono, domicilio, mail)}
+                            boton = "Cambiar datos"
+                        />
 
                     }
                     
