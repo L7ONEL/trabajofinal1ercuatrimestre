@@ -1,6 +1,6 @@
 import { Component } from 'react'
 
-export default class AgregarEditarPersona extends Component {
+export default class AgregarPersona extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -17,7 +17,7 @@ export default class AgregarEditarPersona extends Component {
     render() {
         return (
           <div className='Cuadro' style={{}}>
-            <h2>{this.props.titulo}</h2>
+            <h2>AGREGAR UNA NUEVA PERSONA</h2>
     
             <input 
               type="text" 
@@ -79,7 +79,7 @@ export default class AgregarEditarPersona extends Component {
             <button
               className='Boton'
               onClick={() => this.props.accion()}
-            >{this.props.boton}</button>
+            >Agregar persona</button>
           </div>
         )
       }

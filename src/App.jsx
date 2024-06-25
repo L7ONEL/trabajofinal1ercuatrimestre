@@ -4,10 +4,10 @@ import Registrar from './componentes/Registrar';
 import InicioSesion from "./componentes/InicioSesion";
 import FiltrarPersonas from "./componentes/FiltrarPersonas";
 import Personas from "./componentes/Personas";
-import AgregarEditarPersona from "./componentes/AgregarEditarPersona";
+import AgregarPersona from "./componentes/AgregarPersona";
+import EditarPersona from "./componentes/EditarPersona";
 import './App.css';
 import eliminar from './assets/eliminar.png';
-import editar from './assets/editar.png';
 
 export default class App extends Component {
     constructor(props) {
@@ -15,15 +15,19 @@ export default class App extends Component {
         this.state = {
             username: "",
             contraseña: "",
+
             nombre: "",
             apellido: "",
             dni: "",
+
             registrarse: true,
             iniciar: false,
             personasTabla: false,
             agregar: false,
             editar: false,
+
             token: null,
+
             personas: []
         }
     }
@@ -140,6 +144,37 @@ export default class App extends Component {
             });
     }
 
+    editarPersona(token, persona_id, documento, nombres, apellidos, fechaNac, telefono, domicilio, mail) {
+        const url = "https://personas.ctpoba.edu.ar/api/personas";
+        const data = {
+            documento,
+            nombres,
+            apellidos,
+            fechaNac,
+            telefono,
+            domicilio,
+            mail
+        };
+        const config = {
+            headers: {
+                authorization: token
+            },
+            params: {
+                persona_id
+            }
+        };
+
+        axios.delete(url, data, config)
+            .then((response) => {
+                alert("Se ha actualizado correctamente los datos de la persona");
+                console.log(response.data);
+                this.setState({ registrarse: false, iniciar: false, personasTabla: true, agregar: false, editar: false });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
     render() {
         return (
             <div className='Cuerpo'>
@@ -191,9 +226,7 @@ export default class App extends Component {
                                                 telefono = {cont.telefono}
                                                 domicilio = {cont.domicilio}
                                                 mail = {cont.mail}
-                                                editar = {editar}
                                                 eliminar = {eliminar}
-                                                cambiarModo = {(registrarse, iniciar, personasTabla, agregar, editar) => this.cambiarModo(registrarse, iniciar, personasTabla, agregar, editar)}
                                                 eliminarPersona = {(token, persona_id) => this.eliminarPersona(token, persona_id)}
                                                 token = {this.state.token}
                                             />
@@ -205,23 +238,26 @@ export default class App extends Component {
                                     className="Boton"
                                     onClick={() => this.cambiarModo(false, false, false, true, false)}
                                 >Agregar persona</button>
+
+                                <button 
+                                    className="Boton"
+                                    style={{ marginLeft: "535px" }}
+                                    onClick={() => this.cambiarModo(false, false, false, false, true)}
+                                >Editar persona</button>
                             </div>
                         </div>
 
                     } {this.state.agregar && 
                         
-                        <AgregarEditarPersona 
-                            titulo = "AGREGAR UNA NUEVA PERSONA"
+                        <AgregarPersona 
                             accion = {(documento, nombres, apellidos, fechaNac, telefono, domicilio, mail) => this.registrarPersona(documento, nombres, apellidos, fechaNac, telefono, domicilio, mail)}
-                            boton = "Agregar persona"
                         />
 
                     } {this.state.editar &&
 
-                        <AgregarEditarPersona 
-                            titulo = "EDITAR DATOS DE PERSONA"
-                            accion = {(documento, nombres, apellidos, fechaNac, telefono, domicilio, mail) => this.registrarPersona(documento, nombres, apellidos, fechaNac, telefono, domicilio, mail)}
-                            boton = "Cambiar datos"
+                        <EditarPersona 
+                            token = {this.state.token}
+                            accion = {(token, persona_id, documento, nombres, apellidos, fechaNac, telefono, domicilio, mail) => this.editarPersona(token, persona_id, documento, nombres, apellidos, fechaNac, telefono, domicilio, mail)}
                         />
 
                     }

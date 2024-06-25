@@ -13,12 +13,6 @@ export default class Personas extends Component {
         <th>{this.props.mail}</th>
         <th>
           <img 
-            src={this.props.editar} 
-            alt="ERROR" 
-            onClick={() => this.props.cambiarModo(false, false, false, false, true)} 
-            style={{marginRight: '5px'}} 
-          />
-          <img 
             src={this.props.eliminar} 
             alt="ERROR" 
             onClick={() => this.props.eliminarPersona(this.props.token, this.props.key)} 
