@@ -241,7 +241,7 @@ export default class App extends Component {
 
                                 <button 
                                     className="Boton"
-                                    style={{ marginLeft: "535px" }}
+                                    style={{ marginLeft: "665px" }}
                                     onClick={() => this.cambiarModo(false, false, false, false, true)}
                                 >Editar persona</button>
                             </div>
