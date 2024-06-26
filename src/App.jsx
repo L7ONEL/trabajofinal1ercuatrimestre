@@ -5,7 +5,7 @@ import Registrar from './Componentes/Registrar';
 import InicioSesion from './Componentes/InicioSesion';
 import Regis_Persona from "./Componentes/Regis_Persona";
 
-import React, { Component } from "react";
+import React, {Component} from "react";
 import axios from 'axios';
 import FiltrarPersonas from "./componentes/FiltrarPersonas";
 import Personas from "./Componentes/Personas";
