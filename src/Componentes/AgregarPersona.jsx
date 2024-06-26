@@ -78,7 +78,7 @@ export default class AgregarPersona extends Component {
     
             <button
               className='Boton'
-              onClick={() => this.props.accion()}
+              onClick={() => this.props.accion(this.props.token, this.state.dni, this.state.nombre, this.state.apellido, this.state.fecNac, this.state.numCel, this.state.domicilio, this.state.mail)}
             >Agregar persona</button>
           </div>
         )
