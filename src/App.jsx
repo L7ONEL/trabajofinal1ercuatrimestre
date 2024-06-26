@@ -8,7 +8,7 @@ import Regis_Persona from "./Componentes/Regis_Persona";
 import React, { Component } from "react";
 import axios from 'axios';
 import FiltrarPersonas from "./componentes/FiltrarPersonas";
-import Personas from "./componentes/Personas";
+import Personas from "./Componentes/Personas";
 import AgregarPersona from "./componentes/AgregarPersona";
 import EditarPersona from "./componentes/EditarPersona";
 import './App.css';
