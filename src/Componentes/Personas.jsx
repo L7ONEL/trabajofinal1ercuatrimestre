@@ -4,6 +4,7 @@ export default class Personas extends Component {
   render() {
     return (
       <tr>
+        <th>{this.props.id}</th>
         <th>{this.props.documento}</th>
         <th>{this.props.nombres}</th>
         <th>{this.props.apellidos}</th>
@@ -15,7 +16,7 @@ export default class Personas extends Component {
           <img 
             src={this.props.eliminar} 
             alt="ERROR" 
-            onClick={() => this.props.eliminarPersona(this.props.token, this.props.key)} 
+            onClick={() => this.props.eliminarPersona(this.props.token, this.props.id)} 
             style={{marginLeft: '5px'}} 
           />         
         </th>

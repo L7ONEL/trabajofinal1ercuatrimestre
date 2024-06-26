@@ -24,7 +24,7 @@ export default class App extends Component {
 
             nombre: "",
             apellido: "",
-            dni: "",
+            dni: null,
 
             registrarse: true,
             iniciar: false,
@@ -94,9 +94,13 @@ export default class App extends Component {
       }
          
             .then((response) => {
-                alert("Usuario registrado.");
+                if (response.data.status == "ok") {      
+                    alert("Usuario registrado.");
+                    this.setState({ registrarse: false, iniciar: true, personasTabla: false, agregar: false, editar: false });
+                } else {
+                    alert("Hubo un error al registrar el usuario.")
+                }
                 console.log(response.data);
-                this.setState({ registrarse: false, iniciar: true, personasTabla: false, agregar: false, editar: false });
             })
             .catch((error) => {
                 console.log(error);
@@ -117,27 +121,29 @@ export default class App extends Component {
     
         axios.post(url, data)
             .then((response) => {
-                this.setState({ token: response.data.token, registrarse: false, iniciar: false, personasTabla: true, agregar: false, editar: false });
+                if (response.data.status) {
+                    alert("Sesión iniciada correctamente.");
+                    this.setState({ token: response.data.token, registrarse: false, iniciar: false, personasTabla: true, agregar: false, editar: false });
+                    
+                    this.extraerPersonas(response.data.token, this.state.dni);
+                } else {
+                    alert("Hubo un error al iniciar sesión, compruebe que los datos ingresados son correctos.")
+                }
                 console.log(response.data);
-                alert("Sesión iniciada correctamente.");
-
-                this.extraerPersonas(response.data.token, this.state.dni, this.state.nombre, this.state.apellido)
             })
             .catch((error) => {
                 console.log(error);
             });
     }
 
-    extraerPersonas(token, dni, nombre, apellido) {
+    extraerPersonas(token, documento) {
         const url = "https://personas.ctpoba.edu.ar/api/personas";
         const config = {
             headers: {
                 authorization: token
             },
             params: {
-                documento: dni,
-                nombres: nombre,
-                apellidos: apellido
+                busqueda: documento
             }
         };
 
@@ -162,12 +168,22 @@ export default class App extends Component {
             domicilio,
             mail
         };
+        const config = {
+            headers: {
+                authorization: token
+            },
+        }
         
-        axios.post(url, data)
+        axios.post(url, data, config)
             .then((response) => {
-                alert("Persona registrada.");
                 console.log(response.data);
-                this.setState({ registrarse: false, iniciar: false, personasTabla: true, agregar: false, editar: false });
+                if (response.data.status == "ok") {
+                    alert("Persona registrada correctamente.");
+                
+                    this.setState({ registrarse: false, iniciar: false, personasTabla: true, agregar: false, editar: false });
+                } else {
+                    alert("Ocurrio un error al registrar a la persona.")
+                }
             })
             .catch((error) => {
                 console.log(error);
@@ -184,10 +200,18 @@ export default class App extends Component {
                 persona_id
             }
         };
+        console.log(config);
 
         axios.delete(url, config)
             .then((response) => {
-                alert("Se ha eliminado correctamente a la persona")
+                if (response.data.status = "ok") {
+                    alert("Se ha eliminado correctamente a la persona");
+
+                    this.extraerPersonas(this.state.token, this.state.dni)
+                } else {
+                    alert('Hubo un error al eliminar a la persona.')
+                }
+
                 console.log(response.data);
             })
             .catch((error) => {
@@ -215,11 +239,16 @@ export default class App extends Component {
             }
         };
 
-        axios.delete(url, data, config)
+        axios.put(url, data, config)
             .then((response) => {
-                alert("Se ha actualizado correctamente los datos de la persona");
+                if (response.data.status == "ok") {
+                    alert("Se ha actualizado correctamente los datos de la persona");
+
+                    this.setState({ registrarse: false, iniciar: false, personasTabla: true, agregar: false, editar: false });
+                } else {
+                    alert("Hubo un inconveniente al editar los datos de la persona.")
+                }
                 console.log(response.data);
-                this.setState({ registrarse: false, iniciar: false, personasTabla: true, agregar: false, editar: false });
             })
             .catch((error) => {
                 console.log(error);
@@ -267,13 +296,14 @@ export default class App extends Component {
                         <div className="Cuadro">
                             <FiltrarPersonas 
                                 token = {this.state.token}
-                                extraerPersonas = {(dni, nombre, apellido) => this.extraerPersonas(this.state.token, dni, nombre, apellido)}
+                                extraerPersonas = {(token, documento) => this.extraerPersonas(token, documento)}
                             />
 
                             <div style={{marginTop: '10px'}}>
                                 <table className="Tabla">
                                     <thead className="Titulos">
                                         <tr>
+                                            <th>ID_Persona</th>
                                             <th>DNI</th>
                                             <th>Nombres</th>
                                             <th>Apellidos</th>
@@ -288,6 +318,7 @@ export default class App extends Component {
                                         {this.state.personas.map((cont, index) => 
                                             <Personas
                                                 key={index}
+                                                id = {cont._id}
                                                 documento = {cont.documento}
                                                 nombres = {cont.nombres}
                                                 apellidos = {cont.apellidos}
@@ -310,7 +341,7 @@ export default class App extends Component {
 
                                 <button 
                                     className="Boton"
-                                    style={{ marginLeft: "665px" }}
+                                    style={{ marginLeft: "765px" }}
                                     onClick={() => this.cambiarModo(false, false, false, false, true)}
                                 >Editar persona</button>
                             </div>
@@ -319,7 +350,8 @@ export default class App extends Component {
                     } {this.state.agregar && 
                         
                         <AgregarPersona 
-                            accion = {(documento, nombres, apellidos, fechaNac, telefono, domicilio, mail) => this.registrarPersona(documento, nombres, apellidos, fechaNac, telefono, domicilio, mail)}
+                            token = {this.state.token}
+                            accion = {(token, documento, nombres, apellidos, fechaNac, telefono, domicilio, mail) => this.registrarPersona(token, documento, nombres, apellidos, fechaNac, telefono, domicilio, mail)}
                         />
 
                     } {this.state.editar &&
