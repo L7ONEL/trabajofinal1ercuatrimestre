@@ -83,7 +83,7 @@ export default class App extends Component {
       cambiarModo(registrarse) {
         this.setState({ registrarse })
       }
-
+         
             .then((response) => {
                 alert("Usuario registrado.");
                 console.log(response.data);
