@@ -40,7 +40,7 @@ export default class FiltrarPersonas extends Component {
           className='Boton' 
           style={{backgroundColor: 'gray', marginLeft: '5px'}}
           onClick={() => this.props.extraerPersonas(this.props.token, this.state.dni, this.state.nombre, this.state.apellido)}
-        >Extraer Persona/s</button>
+        >Filtrar Persona/s</button>
 
       </div>
     )

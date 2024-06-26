@@ -11,6 +11,14 @@ export default class Personas extends Component {
         <th>{this.props.telefono}</th>
         <th>{this.props.domicilio}</th>
         <th>{this.props.mail}</th>
+        <th>
+          <img 
+            src={this.props.eliminar} 
+            alt="ERROR" 
+            onClick={() => this.props.eliminarPersona(this.props.token, this.props.key)} 
+            style={{marginLeft: '5px'}} 
+          />         
+        </th>
       </tr>
     )
   }

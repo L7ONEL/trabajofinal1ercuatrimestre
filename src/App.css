@@ -41,7 +41,7 @@
   background-color: #007BFF;
     color: #fff;
     border: none;
-    height: 50px;
+    height: auto;
     width: 200px;
     font-size: large;
     border-radius: 10px;
@@ -66,11 +66,20 @@
   background-color: white;
 }
 
-tr.Titulos {
+thead.Titulos {
   background-color: #007BFF;
   color: white;
 }
 
 th {
   padding: 5px;
+}
+
+img {
+  height: 20px;
+  width: 20px;
+}
+
+img:hover {
+  backdrop-filter: brightness(0.5);
 }
