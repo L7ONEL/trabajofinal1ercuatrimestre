@@ -6,7 +6,6 @@ import InicioSesion from './Componentes/InicioSesion';
 import Regis_Persona from "./Componentes/Regis_Persona";
 
 import React from "react";
-import axios from "axios";
 import FiltrarPersonas from "./componentes/FiltrarPersonas";
 import Personas from "./Componentes/Personas";
 import AgregarPersona from "./componentes/AgregarPersona";
