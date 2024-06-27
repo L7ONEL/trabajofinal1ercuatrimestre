@@ -18,7 +18,7 @@ export default class App extends Component {
 
             nombre: "",
             apellido: "",
-            dni: null,
+            dni: "",
 
             registrarse: true,
             iniciar: false,
@@ -106,7 +106,7 @@ export default class App extends Component {
             });
     }
 
-    registrarPersona(documento, nombres, apellidos, fechaNac, telefono, domicilio, mail) {
+    registrarPersona(token, documento, nombres, apellidos, fechaNac, telefono, domicilio, mail) {
         const url = "https://personas.ctpoba.edu.ar/api/personas";
         const data = {
             documento,
@@ -130,6 +130,7 @@ export default class App extends Component {
                     alert("Persona registrada correctamente.");
                 
                     this.setState({ registrarse: false, iniciar: false, personasTabla: true, agregar: false, editar: false });
+                    this.extraerPersonas(this.state.token, this.state.dni)
                 } else {
                     alert("Ocurrio un error al registrar a la persona.")
                 }
@@ -193,6 +194,7 @@ export default class App extends Component {
                 if (response.data.status == "ok") {
                     alert("Se ha actualizado correctamente los datos de la persona");
 
+                    this.extraerPersonas(this.state.token, this.state.dni)
                     this.setState({ registrarse: false, iniciar: false, personasTabla: true, agregar: false, editar: false });
                 } else {
                     alert("Hubo un inconveniente al editar los datos de la persona.")
@@ -265,16 +267,21 @@ export default class App extends Component {
                                     </tbody>
                                 </table>
 
-                                <button 
-                                    className="Boton"
-                                    onClick={() => this.cambiarModo(false, false, false, true, false)}
-                                >Agregar persona</button>
-
-                                <button 
-                                    className="Boton"
-                                    style={{ marginLeft: "765px" }}
-                                    onClick={() => this.cambiarModo(false, false, false, false, true)}
-                                >Editar persona</button>
+                                <div style={{flexDirection: "row"}}>
+                                    <div style={{float: "left"}}>
+                                        <button 
+                                            className="Boton"
+                                            onClick={() => this.cambiarModo(false, false, false, true, false)}
+                                        >Agregar persona</button>
+                                    </div>
+                                    <div style={{float: "right"}}>
+                                       <button 
+                                            className="Boton"
+                                            onClick={() => this.cambiarModo(false, false, false, false, true)}
+                                        >Editar persona</button> 
+                                    </div>
+                                </div>
+                                
                             </div>
                         </div>
 
