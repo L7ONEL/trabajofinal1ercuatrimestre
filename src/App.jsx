@@ -60,7 +60,7 @@ export default class App extends Component {
     cambiarModo(registrarse, iniciar, personasTabla, agregar, editar) {
         this.setState({ registrarse, iniciar, personasTabla, agregar, editar });
     }
-        
+
     iniciarSesion(user, pass) {
         const url = "https://personas.ctpoba.edu.ar/api/ingresar";
         const data = {
@@ -269,19 +269,19 @@ export default class App extends Component {
 
                                 <div style={{flexDirection: "row"}}>
                                     <div style={{float: "left"}}>
-                                        <button 
-                                            className="Boton"
-                                            onClick={() => this.cambiarModo(false, false, false, true, false)}
-                                        >Agregar persona</button>
+                                <button 
+                                    className="Boton"
+                                    onClick={() => this.cambiarModo(false, false, false, true, false)}
+                                >Agregar persona</button>
                                     </div>
                                     <div style={{float: "right"}}>
-                                       <button 
-                                            className="Boton"
-                                            onClick={() => this.cambiarModo(false, false, false, false, true)}
-                                        >Editar persona</button> 
-                                    </div>
-                                </div>
-                                
+                                <button 
+                                    className="Boton"
+                                    onClick={() => this.cambiarModo(false, false, false, false, true)}
+                                >Editar persona</button>
+                            </div>
+                        </div>
+
                             </div>
                         </div>
 
@@ -305,4 +305,4 @@ export default class App extends Component {
             </div>
         );
     }
-}
+    }
