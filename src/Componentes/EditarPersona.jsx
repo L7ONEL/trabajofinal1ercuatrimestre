@@ -4,7 +4,6 @@ export default class EditarPersona extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: 0,
             dni: "",
             nombre: "",
             apellido: "",
@@ -21,11 +20,11 @@ export default class EditarPersona extends Component {
             <h2>EDITAR DATOS DE PERSONA</h2>
 
             <input 
-              type="number" 
-              className='Dato' 
-              placeholder='ID del usuario'
-              onChange={(e) => this.setState({id:e.target.value})}
+              type="text" 
+              className='Dato'
+              value={this.props.id}
               required
+              readOnly
             />
     
             <input 
@@ -87,7 +86,7 @@ export default class EditarPersona extends Component {
     
             <button
               className='Boton'
-              onClick={() => this.props.accion(this.props.token, this.state.id, this.state.dni, this.state.nombre, this.state.apellido, this.state.fecNac, this.state.numCel, this.state.domicilio, this.state.mail)}
+              onClick={() => this.props.accion(this.props.token, this.props.id, this.state.dni, this.state.nombre, this.state.apellido, this.state.fecNac, this.state.numCel, this.state.domicilio, this.state.mail)}
             >Cambiar datos</button>
           </div>
         )

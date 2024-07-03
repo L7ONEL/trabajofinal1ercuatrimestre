@@ -12,7 +12,7 @@ export default class FiltrarPersonas extends Component {
     return (
       <div style={{display: 'flex', flexDirection: 'row'}}>
         <h4>
-          DNI: <input 
+          DNI, Nombre o Apellido: <input 
                   type="text" 
                   value={this.state.dni} 
                   onChange={(e) => this.setState({dni:e.target.value})}

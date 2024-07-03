@@ -16,7 +16,7 @@ export default class AgregarPersona extends Component {
 
     render() {
         return (
-          <div className='Cuadro' style={{}}>
+          <div className='Cuadro'>
             <h2>AGREGAR UNA NUEVA PERSONA</h2>
     
             <input 
