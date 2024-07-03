@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from 'axios';
-import Registrar from './Componentes/Registrar';
+import Registrar from './componentes/Registrar';
 import InicioSesion from "./componentes/InicioSesion";
 import FiltrarPersonas from "./componentes/FiltrarPersonas";
 import Personas from "./componentes/Personas";
