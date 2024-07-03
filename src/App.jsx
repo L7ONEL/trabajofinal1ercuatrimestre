@@ -7,7 +7,6 @@ import Personas from "./componentes/Personas";
 import AgregarPersona from "./componentes/AgregarPersona";
 import EditarPersona from "./componentes/EditarPersona";
 import './App.css';
-import eliminar from './assets/eliminar.png';
 
 export default class App extends Component {
     constructor(props) {
@@ -28,7 +27,9 @@ export default class App extends Component {
 
             token: null,
 
-            personas: []
+            personas: [],
+
+            idPersona: "",
         }
     }
 
@@ -60,8 +61,9 @@ export default class App extends Component {
     cambiarModo(registrarse, iniciar, personasTabla, agregar, editar) {
         this.setState({ registrarse, iniciar, personasTabla, agregar, editar });
     }
-        
+
     iniciarSesion(user, pass) {
+        this.setState({ token: "" });
         const url = "https://personas.ctpoba.edu.ar/api/ingresar";
         const data = {
             user,
@@ -206,6 +208,12 @@ export default class App extends Component {
             });
     }
 
+    setIdPersona(idPersona) {
+        console.log(idPersona);
+
+        this.setState({ idPersona })
+    }
+
     render() {
         return (
             <div className='Cuerpo'>
@@ -259,9 +267,10 @@ export default class App extends Component {
                                                 telefono = {cont.telefono}
                                                 domicilio = {cont.domicilio}
                                                 mail = {cont.mail}
-                                                eliminar = {eliminar}
                                                 eliminarPersona = {(token, persona_id) => this.eliminarPersona(token, persona_id)}
                                                 token = {this.state.token}
+                                                cambiarModo = {() => this.cambiarModo(false, false, false, false, true)}
+                                                setIdPersona = {(idPersona) => this.setIdPersona(idPersona)}
                                             />
                                         )}
                                     </tbody>
@@ -269,19 +278,19 @@ export default class App extends Component {
 
                                 <div style={{flexDirection: "row"}}>
                                     <div style={{float: "left"}}>
-                                        <button 
-                                            className="Boton"
-                                            onClick={() => this.cambiarModo(false, false, false, true, false)}
-                                        >Agregar persona</button>
+                                <button 
+                                    className="Boton"
+                                    onClick={() => this.cambiarModo(false, false, false, true, false)}
+                                >Agregar persona</button>
                                     </div>
                                     <div style={{float: "right"}}>
-                                       <button 
-                                            className="Boton"
-                                            onClick={() => this.cambiarModo(false, false, false, false, true)}
-                                        >Editar persona</button> 
-                                    </div>
-                                </div>
-                                
+                                <button 
+                                    className="Boton"
+                                    onClick={() => this.cambiarModo(false, false, false, false, true)}
+                                >Editar persona</button>
+                            </div>
+                        </div>
+
                             </div>
                         </div>
 
@@ -296,6 +305,7 @@ export default class App extends Component {
 
                         <EditarPersona 
                             token = {this.state.token}
+                            id = {this.state.idPersona}
                             accion = {(token, persona_id, documento, nombres, apellidos, fechaNac, telefono, domicilio, mail) => this.editarPersona(token, persona_id, documento, nombres, apellidos, fechaNac, telefono, domicilio, mail)}
                         />
 
@@ -305,4 +315,4 @@ export default class App extends Component {
             </div>
         );
     }
-}
+    }
