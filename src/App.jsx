@@ -283,12 +283,6 @@ export default class App extends Component {
                                     onClick={() => this.cambiarModo(false, false, false, true, false)}
                                 >Agregar persona</button>
                                     </div>
-                                    <div style={{float: "right"}}>
-                                <button 
-                                    className="Boton"
-                                    onClick={() => this.cambiarModo(false, false, false, false, true)}
-                                >Editar persona</button>
-                            </div>
                         </div>
 
                             </div>
