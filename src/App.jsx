@@ -1,22 +1,12 @@
-
-import { Component } from "react";
-import axios from 'axios'
-import Registrar from './Componentes/Registrar';
-import InicioSesion from './Componentes/InicioSesion';
-import Regis_Persona from "./Componentes/Regis_Persona";
-
-import React from "react";
 import React, { Component } from "react";
 import axios from 'axios';
-import Registrar from './Componentes/Registrar';
-import InicioSesion from "./Componentes/InicioSesion";
-import FiltrarPersonas from "/componentes/FiltrarPersonas";
-import Personas from "./Componentes/Personas";
+import Registrar from './componentes/Registrar';
+import InicioSesion from "./componentes/InicioSesion";
+import FiltrarPersonas from "./componentes/FiltrarPersonas";
+import Personas from "./componentes/Personas";
 import AgregarPersona from "./componentes/AgregarPersona";
 import EditarPersona from "./componentes/EditarPersona";
 import './App.css';
-import eliminar from './assets/eliminar.png';
-
 
 export default class App extends Component {
     constructor(props) {
@@ -37,7 +27,9 @@ export default class App extends Component {
 
             token: null,
 
-            personas: []
+            personas: [],
+
+            idPersona: "",
         }
     }
 
@@ -52,50 +44,6 @@ export default class App extends Component {
         };
         
         axios.post(url, data)
-
-          .then((response) => {
-            alert("Usuario registrado.");
-            console.log(response.data);
-            
-            this.setState({ registrarse: false });
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-
-      registrarPersona(documento, nombres, apellidos, fechnac, telefono, domicilio, mail){
-        const url = "http://personas.ctpoba.edu.ar/api/personas";
-        const data = {
-          documento: documento,
-          nombre: nombres,
-          apellido: apellidos,
-          fechnac: fechnac,
-          telefono: telefono,
-          domicilio: domicilio,
-          mail: mail,
-        };
-         axios.post(url, data, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-         })
-         .then((response)=>{
-          alert("Persona guardada.");
-          console.log(response.data);
-         })
-         .catch((error)=>{
-          console.log(error);
-         }
-        );
-
-
-      };
-
-      cambiarModo(registrarse) {
-        this.setState({ registrarse })
-      }
-         
             .then((response) => {
                 if (response.data.status == "ok") {      
                     alert("Usuario registrado.");
@@ -114,9 +62,8 @@ export default class App extends Component {
         this.setState({ registrarse, iniciar, personasTabla, agregar, editar });
     }
 
-        
-
     iniciarSesion(user, pass) {
+        this.setState({ token: "" });
         const url = "https://personas.ctpoba.edu.ar/api/ingresar";
         const data = {
             user,
@@ -261,28 +208,16 @@ export default class App extends Component {
             });
     }
 
+    setIdPersona(idPersona) {
+        console.log(idPersona);
+
+        this.setState({ idPersona })
+    }
+
     render() {
         return (
             <div className='Cuerpo'>
                 <div className='Lista'>
-
-                  {this.state.registrarse ?
-                    <Registrar 
-                      registrarUsuario = {(user, pass, nombre, apellido, dni) => this.registrarUsuario(user, pass, nombre, apellido, dni)}
-                      cambiarModo = {() => this.cambiarModo()}
-                    />
-                  :     
-                    <InicioSesion 
-                      iniciarSesion = {(user, pass) => this.iniciarSesion(user, pass)}
-                      cambiarModo = {() => this.cambiarModo()}
-                    />
-            
-                  }
-                  <Regis_Persona 
-                  registrarPersona = {(documento, nombres, apellidos, fechnac, telefono, domicilio, mail) => this.registrarPersona(documento, nombres, apellidos, fechnac, telefono, domicilio, telefono)}/>
-                     
-                  
-
                     {this.state.registrarse &&
 
                         <Registrar 
@@ -332,9 +267,10 @@ export default class App extends Component {
                                                 telefono = {cont.telefono}
                                                 domicilio = {cont.domicilio}
                                                 mail = {cont.mail}
-                                                eliminar = {eliminar}
                                                 eliminarPersona = {(token, persona_id) => this.eliminarPersona(token, persona_id)}
                                                 token = {this.state.token}
+                                                cambiarModo = {() => this.cambiarModo(false, false, false, false, true)}
+                                                setIdPersona = {(idPersona) => this.setIdPersona(idPersona)}
                                             />
                                         )}
                                     </tbody>
@@ -347,12 +283,6 @@ export default class App extends Component {
                                     onClick={() => this.cambiarModo(false, false, false, true, false)}
                                 >Agregar persona</button>
                                     </div>
-                                    <div style={{float: "right"}}>
-                                <button 
-                                    className="Boton"
-                                    onClick={() => this.cambiarModo(false, false, false, false, true)}
-                                >Editar persona</button>
-                            </div>
                         </div>
 
                             </div>
@@ -369,6 +299,7 @@ export default class App extends Component {
 
                         <EditarPersona 
                             token = {this.state.token}
+                            id = {this.state.idPersona}
                             accion = {(token, persona_id, documento, nombres, apellidos, fechaNac, telefono, domicilio, mail) => this.editarPersona(token, persona_id, documento, nombres, apellidos, fechaNac, telefono, domicilio, mail)}
                         />
 
@@ -377,7 +308,5 @@ export default class App extends Component {
                 </div>
             </div>
         );
-    }
-  
     }
     }

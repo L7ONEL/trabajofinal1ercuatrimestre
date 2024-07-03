@@ -1,4 +1,6 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import editar from "../assets/editar.png";
+import eliminar from "../assets/eliminar.png"
 
 export default class Personas extends Component {
   render() {
@@ -14,7 +16,12 @@ export default class Personas extends Component {
         <th>{this.props.mail}</th>
         <th>
           <img 
-            src={this.props.eliminar} 
+            src={editar} 
+            alt="ERROR"
+            onClick={() => {this.props.cambiarModo(false, false, false, false, true), this.props.setIdPersona(this.props.id)}}
+          />
+          <img 
+            src={eliminar} 
             alt="ERROR" 
             onClick={() => this.props.eliminarPersona(this.props.token, this.props.id)} 
             style={{marginLeft: '5px'}} 
